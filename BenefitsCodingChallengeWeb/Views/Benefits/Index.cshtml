@@ -1,0 +1,65 @@
+﻿@model BenefitsCodingChallengeWeb.Models.EmployeeDataModel
+@{
+    ViewBag.Title = "Calculate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Calculate Employee Benefits Cost</h2>
+@using (Html.BeginForm("Calculate", "Benefits"))
+{
+    <p>
+        Calculate an employee's benefits cost based on the number of dependents the employee will
+        add to the benefits program, plus discounts.  Enter the employee's information below.
+    </p>
+    <div class="row">
+        <div class="form-group col-xs-4">
+            @Html.LabelFor(m => m.Employee.FirstName)
+            @Html.TextBoxFor(m => m.Employee.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Employee.FirstName, null, new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-xs-4">
+            @Html.LabelFor(m => m.Employee.LastName)
+            @Html.TextBoxFor(m => m.Employee.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Employee.LastName, null, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div>
+        <p>Click on the "Add Dependent" button to add dependents for the employee.</p>
+    </div>
+
+    <fieldset>
+        <div id="new-Dependent">
+            @foreach (var dependent in Model.Dependents)
+            {
+                Html.RenderPartial("~/Views/Benefits/_Dependent.cshtml", dependent);
+            }
+
+        </div>
+        <div class="form-group">
+            <br />
+            <input type="button" class="btn btn-primary" id="adddependent" name="adddependent" value="Add Dependent" />
+            <br />
+        </div>
+        <br />
+        <div>
+            <button class="btn btn-primary" type="submit">Calculate Employee Benefits Cost</button>
+        </div>
+    </fieldset>
+
+    @section Scripts
+            {
+        <script type="text/javascript">
+                    $('#adddependent').on('click',
+                        function () {
+                            $.ajax({
+                                async: false,
+                                url: '/Benefits/AddNewDependent'
+                            }).done(function (partialView) {
+                                $('#new-Dependent').append(partialView);
+                            });
+                        });
+        </script>
+    }
+}
+

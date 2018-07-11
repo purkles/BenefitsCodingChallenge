@@ -1,0 +1,153 @@
+﻿@model BenefitsCodingChallenge.Entities.BenefitsCostResult
+
+@{
+    ViewBag.Title = "Employee Benefits Cost Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (String.IsNullOrWhiteSpace(Model.ErrorDetails))
+{
+    <div>
+        <dl class="dl-horizontal"></dl>
+        <div>
+            <h5>Employee Information</h5>
+        </div>
+
+        <table class="table table-striped table-condensed table-bordered" style="font-size: 12px;">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.EmployeeData.Employee.FirstName, "Employee First Name")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.EmployeeData.Employee.FirstName)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.EmployeeData.Employee.LastName, "Employee Last Name")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.EmployeeData.Employee.LastName)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.EmployeeData.Employee.IsEligibleForDiscount, "Is Employee Eligible For Discount?")
+                    </th>
+                    @if (Model.EmployeeData.Employee.IsEligibleForDiscount)
+                    {
+                        <td>
+                            Yes
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            No
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+
+        @if (Model.EmployeeData.Dependents != null && Model.EmployeeData.Dependents.Count > 0)
+        {
+            <h5>Dependents Information</h5>
+            <table class="table table-striped table-condensed table-bordered" style="font-size: 12px;">
+                <tbody>
+                    @foreach (var dependent in Model.EmployeeData.Dependents)
+                    {
+                        <tr>
+                            <th scope="row">
+                                @Html.Label(dependent.FirstName, "Dependent First Name")
+                            </th>
+                            <td>
+                                @dependent.FirstName
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                @Html.Label(dependent.LastName, "Dependent Last Name")
+                            </th>
+                            <td>
+                                @dependent.LastName
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">
+                                @Html.Label(dependent.IsEligibleForDiscount.ToString(), "Is Dependent Eligible For Discount?")
+                            </th>
+                            @if (dependent.IsEligibleForDiscount)
+                            {
+                                <td> Yes </td>
+                            }
+                            else
+                            {
+                                <td> No </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <br />
+        <h4>Benefits Cost Data</h4>
+        <table class="table table-striped table-bordered" style="font-size: 12px;">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.BenefitCostForEmployeeOnly, "Total Benefit Cost Per Year For Employee Only")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.BenefitCostForEmployeeOnly)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.BenefitCostForDependentsOnly, "Total Benefit Cost Per Year For Dependents Only")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.BenefitCostForDependentsOnly)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.TotalBenefitsCostPerYear, "Total Benefit Cost Per Year For Employee and Dependents")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.TotalBenefitsCostPerYear)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.TotalEmployeeCostPerPayPeriod, "Total Employee Cost Per Pay Period (benefits and salary)")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.TotalEmployeeCostPerPayPeriod)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(m => m.TotalEmployeeCostPerYear, "Total Employee Cost Per Year (benefits and salary)")
+                    </th>
+                    <td>
+                        @Html.ValueFor(m => m.TotalEmployeeCostPerYear)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <br />
+    <div class="alert alert-danger">
+        <span class="glyphicon glyphicon-exclamation-sign"></span>
+        <span>Error: @Model.ErrorDetails</span>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Back to Employee Benefits Cost", "Index")
+</p>
